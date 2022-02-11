@@ -9,8 +9,6 @@
 
 
 
-std::ofstream FileLoggerSingletone::logOut;
-
 void FileLoggerSingletone::OpenLogFile(const std::string& FN)
 {
     logOut.open(FN, std::ios_base::out);
