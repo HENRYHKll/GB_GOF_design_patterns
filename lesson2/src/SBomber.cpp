@@ -178,6 +178,14 @@ void SBomber::DeleteStaticObj(GameObject* pObj)
     }
 }
 
+void SBomber::CommandExecuter(Command* command) {
+    if (command) {
+        command->execute();
+        delete command;
+    }
+}
+
+
 std::vector<DestroyableGroundObject*> SBomber::FindDestoyableGroundObjects()
     const
 {
