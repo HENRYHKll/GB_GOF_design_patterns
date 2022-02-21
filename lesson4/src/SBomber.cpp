@@ -118,6 +118,22 @@ void SBomber::CheckPlaneAndLevelGUI()
     }
 }
 
+void SBomber::CheckBombsAndGround()
+{
+    std::vector<Bomb*> vecBombs = FindAllBombs();
+    Ground*            pGround  = FindGround();
+    const double       y        = pGround->GetY();
+    for (size_t i = 0; i < vecBombs.size(); i++)
+    {
+        if (vecBombs[i]->GetY() >= y)
+        {
+            pGround->AddCrater(vecBombs[i]->GetX());
+            CheckDestoyableObjects(vecBombs[i]);
+            DeleteDynamicObj(vecBombs[i]);
+        }
+    }
+}
+
 void SBomber::CheckDestoyableObjects(Bomb* pBomb)
 {
     std::vector<DestroyableGroundObject*> vecDestoyableObjects =
@@ -233,54 +249,6 @@ Plane* SBomber::FindPlane() const
 
     return nullptr;
 }
-
-void SBomber::CheckBombsAndGround() {
-  vecBombs = FindAllBombs();
-  Bomb * pBomb;
-  std::stack<Bomb*> stack;
-  Ground* pGround = FindGround();
-  const double y = pGround->GetY();
-  unsigned int size = vecBombs.size();
-  BombIterator bombIterator(&vecBombs);
-  auto it=this->begin();
-  for(;it!= this->end();) {
-        if ((*it).GetY() >= y) {
-          pGround->AddCrater((*it).GetX());
-          CheckDestroyableObjects(&(*it));
-          stack.push(&(*it));
-    //          DeleteDynamicObj(&(*it));
-            it = this->erase(it);
-        }
-        else
-            ++it;
-    }
-  while(!stack.empty()) {
-      pBomb=stack.top();
-      DeleteBomb(pBomb);
-      stack.pop();
-  }
-
-}
-
-void SBomber::DeleteBomb(Bomb * pBomb) {
-    auto it = vecBombs.begin();
-    for (; it != vecBombs.end(); it++) {
-        if (*it == pBomb) {
-            vecBombs.erase(it);
-            break;
-        }
-    }
-}
-
-BombIterator  SBomber::erase(BombIterator & bombIterator) {
-    auto tmp = bombIterator;
-    ++tmp;
-    DeleteDynamicObj(&(*bombIterator));
-    return tmp;
-}
-
-BombIterator SBomber::begin() { BombIterator it(&vecBombs); return it; }
-BombIterator SBomber::end() { BombIterator it(&vecBombs); it.reset(); return it; }
 
 LevelGUI* SBomber::FindLevelGUI() const
 {

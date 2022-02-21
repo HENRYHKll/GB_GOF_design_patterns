@@ -7,7 +7,6 @@
 #include "Bomb.h"
 #include "Ground.h"
 #include "Tank.h"
-#include "BombIterator.h"
 
 class SBomber
 {
@@ -45,19 +44,10 @@ private:
 
     std::vector<DynamicObject*> vecDynamicObj;
     std::vector<GameObject*> vecStaticObj;
-
-    void DeleteBomb(Bomb * pBomb);
-
-    BombIterator begin();
-    BombIterator end();
-    BombIterator erase(BombIterator & bombIterator);
-
     
     bool exitFlag;
 
     uint64_t startTime, finishTime, passedTime;
     uint16_t bombsNumber, deltaTime, fps;
     int16_t score;
-
-
 };
